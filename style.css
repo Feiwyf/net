@@ -1,0 +1,198 @@
+@layer base, demo;
+@import url(https://fonts.bunny.net/css?family=abel:400);
+
+@property --angle {
+	syntax: "<angle>";
+	initial-value: 0deg;
+	inherits: false;
+}
+
+@layer demo {
+	.cards {
+		display: flex; /* 使用 Flexbox */
+		flex-direction: row; /* 設置為橫向排列 */
+		justify-content: space-between; /* 卡片之間均勻分布 */
+		gap: 1rem; /* 卡片之間的間距 */
+		width: 100%; /* 確保容器寬度 */
+		max-width: 1200px; /* 可選：設置最大寬度 */
+		margin: 0 auto; /* 居中容器 */
+	}
+	.card {
+		flex: 1; /* 每張卡片平分寬度 */
+		max-width: 30%; /* 可選：限制每張卡片的最大寬度 */
+		display: flex;
+		flex-direction: column; /* 讓卡片內部內容垂直排列 */
+		align-items: center; /* 卡片內部內容居中 */
+		text-align: center; /* 文字居中 */
+		--animation-duration: 8s;
+
+		--border-width: 5px;
+		--glow-offset: -20px;
+		--border-radius: 0px;
+		/*
+		--neon-clr-1: rgb(110, 17, 176);
+		--neon-clr-2: rgb(190, 219, 255);
+		*/
+
+		position: relative;
+		border: solid var(--border-width) #0000;
+		border-radius: var(--border-radius);
+
+		@media (width > 600px) {
+			min-height: 350px;
+		}
+
+		/*isolation: isolate;*/
+		/* not relevant - just to place the text in the center */
+
+		background-image: url("https://images.unsplash.com/photo-1481819613568-3701cbc70156?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NDQ2NTU3MTR8&ixlib=rb-4.0.3&q=85");
+		background-attachment: fixed;
+		background-size: cover;
+		background-position: top center;
+
+		/* natural color */
+		&:nth-child(1) {
+			--moon-clr: rgb(1, 1, 1);
+		}
+
+		/* orange moon */
+		&:nth-child(2) {
+			--moon-clr: rgb(166, 95, 0);
+		}
+		/* red moon */
+		&:nth-child(3) {
+			--moon-clr: rgb(159, 7, 18);
+		}
+		/* blue moon */
+		&:nth-child(4) {
+			--moon-clr: rgb(0, 89, 138);
+		}
+		& > div {
+			position: relative;
+			z-index: 2;
+			display: grid;
+			grid-template-rows: auto 1fr auto;
+			height: 100%;
+			padding: 1rem;
+
+			&::before {
+				content: "";
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(to bottom, var(--moon-clr), #0000);
+				opacity: 0.5;
+				z-index: -1;
+			}
+		}
+		& h2 {
+			margin: 0;
+			font-size: 1.4rem;
+			text-shadow: 1px 1px var(--moon-clr);
+		}
+		& p {
+			text-shadow: 0 0 2px black;
+			font-size: 0.9rem;
+			line-height: 1.4;
+		}
+
+		& a {
+			background-color: var(--moon-clr);
+			color: white;
+			font-size: 0.8rem;
+			text-transform: lowercase;
+			width: 80px;
+			padding: 0.25rem 0.5rem;
+			text-decoration: none;
+			transition: 150ms ease-in-out;
+			border: 1px solid rgba(255 255 255 / 0.5);
+
+			&:hover {
+				width: 100%;
+			}
+		}
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: calc(
+				var(--border-width) * -1
+			); /* use negative inset to place the "border" where it would be in the parent element */
+			border: inherit;
+			border-radius: inherit;
+			background: conic-gradient(
+					from var(--angle),
+					var(--moon-clr) 40%,
+					transparent,
+					var(--moon-clr) 60%
+				)
+				border-box;
+			mask: conic-gradient(yellow 0 0) subtract,
+				conic-gradient(yellow 0 0) padding-box;
+
+			opacity: 0.75;
+			z-index: 1;
+			animation-name: neon-rotate;
+			animation-duration: var(--animation-duration);
+			animation-direction: forwards;
+			animation-iteration-count: infinite;
+			animation-timing-function: linear;
+		}
+		&::after {
+			content: "";
+			inset: var(--glow-offset);
+			position: absolute;
+			z-index: -2;
+			background-color: var(--moon-clr);
+			background: conic-gradient(
+				from var(--angle),
+				var(--moon-clr),
+				transparent,
+				var(--moon-clr)
+			);
+			border-radius: 15px;
+			filter: blur(12px);
+			opacity: 0.75;
+
+			animation-name: neon-rotate;
+			animation-duration: var(--animation-duration);
+			animation-direction: forwards;
+			animation-iteration-count: infinite;
+			animation-timing-function: linear;
+		}
+	}
+	@keyframes neon-rotate {
+		from {
+			--angle: 0deg;
+		}
+		to {
+			--angle: 360deg;
+		}
+	}
+	.blue-glow {
+		box-shadow: 0 0 15px 5px rgba(0, 0, 255, 0.5); /* 藍色光環 */
+		border-radius: 10px; /* 可選：讓邊角更圓滑 */
+	}
+}
+/* general styling */
+@layer base {
+	* {
+		box-sizing: border-box;
+	}
+	:root {
+		/*color-scheme: light dark;*/
+
+		--bg-dark: rgb(2, 6, 24);
+		--bg-light: rgb(229, 229, 229);
+		--txt-light: rgb(10, 10, 10);
+		--txt-dark: rgb(245, 245, 245);
+	}
+	body {
+		background-color: rgb(0, 0, 0); /* 半透明白色 */
+		color: var(--txt-dark); /* 確保文字顏色清晰 */
+		min-height: 100vh;
+		margin: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}
